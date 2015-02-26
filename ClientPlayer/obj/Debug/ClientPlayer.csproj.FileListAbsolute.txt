@@ -1,0 +1,10 @@
+C:\Users\mk\Documents\Visual Studio 2013\Projects\ClientPlayer\ClientPlayer\obj\Debug\ClientPlayer.csprojResolveAssemblyReference.cache
+C:\Users\mk\Documents\Visual Studio 2013\Projects\ClientPlayer\ClientPlayer\obj\Debug\ClientPlayer.formpresent.resources
+C:\Users\mk\Documents\Visual Studio 2013\Projects\ClientPlayer\ClientPlayer\obj\Debug\ClientPlayer.Properties.Resources.resources
+C:\Users\mk\Documents\Visual Studio 2013\Projects\ClientPlayer\ClientPlayer\obj\Debug\ClientPlayer.csproj.GenerateResource.Cache
+C:\Users\mk\Documents\Visual Studio 2013\Projects\ClientPlayer\ClientPlayer\bin\Debug\ClientPlayer.exe
+C:\Users\mk\Documents\Visual Studio 2013\Projects\ClientPlayer\ClientPlayer\bin\Debug\ClientPlayer.pdb
+C:\Users\mk\Documents\Visual Studio 2013\Projects\ClientPlayer\ClientPlayer\obj\Debug\ClientPlayer.exe
+C:\Users\mk\Documents\Visual Studio 2013\Projects\ClientPlayer\ClientPlayer\obj\Debug\ClientPlayer.pdb
+C:\Users\mk\documents\visual studio 2013\Projects\ClientPlayer\ClientPlayer\bin\Debug\Utility.dll
+C:\Users\mk\documents\visual studio 2013\Projects\ClientPlayer\ClientPlayer\bin\Debug\Utility.pdb
