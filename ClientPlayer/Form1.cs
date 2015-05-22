@@ -38,6 +38,7 @@ namespace ClientPlayer
         private bool registed = false;
         private int timeLeft;
         string _name;
+        private bool sendted = false;
         #endregion
 
 
@@ -45,6 +46,12 @@ namespace ClientPlayer
         {
             InitializeComponent();
             CheckForIllegalCrossThreadCalls = false;
+
+            labelQuestion.Text = "";
+            labelTimer.Text = "";
+            labelAnswer.Text = "";
+            labelStatus.Text = "";
+            button1.Enabled = false;
         }
 
         private void formpresent_Load(object sender, EventArgs e)
@@ -70,6 +77,10 @@ namespace ClientPlayer
                 thConnecttoServer.Start();
                 
 
+            }
+            else
+            {
+                Application.Exit();
             }
         }
 
@@ -103,6 +114,8 @@ namespace ClientPlayer
                             switch (reciveMessage.type)
                             {
                                 case (Utility.Message.Type.Quest):
+                                    sendted = false;
+                                    button1.Enabled = true;
                                     labelQuestion.Text = reciveMessage.x.question;
                                     labelAnswer.Text = "The true answer is : "+ reciveMessage.x.ans;
                                     labelAnswer.Visible = false;
@@ -113,16 +126,29 @@ namespace ClientPlayer
                                         Bitmap image = null;
                                         image = new Bitmap(returnImage);
                                         pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
-                                        pictureBox1.ClientSize = new Size(360, 270);
+                                        pictureBox1.ClientSize = new Size(600, 400);
                                         pictureBox1.Image = (Image)image;
                                     }
                                     {
-                                        
+                                        timeLeft = reciveMessage.x.questionTime*10;
                                         StartTheQuestion();
                                     }
                                     break;
                                 case (Utility.Message.Type.ShowAns):
                                     labelAnswer.Visible = true; 
+                                    break;
+                                case (Utility.Message.Type.Ans):
+                                    if (!sendted)
+                                    {
+                                        timerCountDown.Stop();
+                                        button1.Enabled = false;
+                                    }
+                                    break;
+                                case (Utility.Message.Type.Cnt):
+                                    if (!sendted)
+                                    {
+                                        button1.Enabled = true;
+                                    }
                                     break;
                             }
                         }
@@ -131,6 +157,7 @@ namespace ClientPlayer
                     catch
                     {
                         MessageBox.Show("Lost Connect!!!! + IP");
+                        registed = false;
                         Connect();
                     }
                 }
@@ -138,6 +165,7 @@ namespace ClientPlayer
             catch
             {
                 MessageBox.Show("Lost Connect!!!!");
+                registed = false;
                 Connect();
             }
 
@@ -146,8 +174,15 @@ namespace ClientPlayer
 
         private void formpresent_FormClosed(object sender, FormClosedEventArgs e)
         {
-            Client.Close();
-            thConnecttoServer.Abort();
+            if (null != Client)
+            {
+                Client.Close();
+            }
+            if (null != thConnecttoServer)
+            {
+                thConnecttoServer.Abort();
+            }
+            
             Application.Exit();
         }
 
@@ -166,7 +201,20 @@ namespace ClientPlayer
                     Utility.Message registerMess = 
                         new Utility.Message(Utility.Message.Type.JoinSlot, null, slot.Text, LocalIPAddress(), _name);
                     SendData(registerMess);
+
+                    this.TopMost = true;
+                    this.FormBorderStyle = FormBorderStyle.None;
+                    this.WindowState = FormWindowState.Maximized;
+
                 }
+                else
+                {
+                    Application.Exit();
+                }
+            }
+            else
+            {
+                Application.Exit();
             }
         }
 
@@ -183,7 +231,6 @@ namespace ClientPlayer
                 }
                 catch (Exception er)
                 {
-                    
                     
                 }
             
@@ -233,7 +280,7 @@ namespace ClientPlayer
             }
             else
             {
-                timeLeft = 100;
+                
                 labelTimer.Text = "10''00";
                 timerCountDown.Interval = 100;
                 timerCountDown.Start();
@@ -247,13 +294,14 @@ namespace ClientPlayer
 
         private void sendAnswers()
         {
-            Utility.Message newMess = new Utility.Message(Utility.Message.Type.Ans, null, textBox1.Text,IP, _name);
+            Utility.Message newMess = new Utility.Message(Utility.Message.Type.Ans, null, "",IP, _name);
             SendData(newMess);
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
             sendAnswers();
+            sendted = true;
             button1.Enabled = false;
             timerCountDown.Stop();
             labelTimer.Text = String.Format("{0}''{1}", timeLeft / 10, (timeLeft % 10));
@@ -293,7 +341,6 @@ namespace ClientPlayer
                 labelTimer.Text = "Time's up!";
                 // MessageBox.Show("Time's up");
                 button1.Enabled = false;
-                textBox1.Enabled = false;
                 sendAnswers();
             }
         }
